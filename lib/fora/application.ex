@@ -14,7 +14,8 @@ defmodule Fora.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Fora.PubSub},
       # Start the Endpoint (http/https)
-      ForaWeb.Endpoint
+      ForaWeb.Endpoint,
+      {Oban, Application.get_env(:fora, Oban)}
       # Start a worker by calling: Fora.Worker.start_link(arg)
       # {Fora.Worker, arg}
     ]

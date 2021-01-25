@@ -18,5 +18,7 @@ config :fora, ForaWeb.Endpoint,
   http: [port: 4002],
   server: false
 
+config :fora, Oban, crontab: false, queues: false, plugins: false
+
 # Print only warnings and errors during test
 config :logger, level: :warn
