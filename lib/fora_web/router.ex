@@ -25,7 +25,7 @@ defmodule ForaWeb.Router do
   #   pipe_through :api
   # end
 
-  # Enables LiveDashboard only for development
+  # Enables LiveDashboard&Bamboo Viewer only for development
   #
   # If you want to use the LiveDashboard in production, you should put
   # it behind authentication and allow only admins to access it.
@@ -39,5 +39,7 @@ defmodule ForaWeb.Router do
       pipe_through :browser
       live_dashboard "/dashboard", metrics: ForaWeb.Telemetry
     end
+
+    forward "/sent_emails", Bamboo.SentEmailViewerPlug
   end
 end

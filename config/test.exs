@@ -22,3 +22,5 @@ config :fora, Oban, crontab: false, queues: false, plugins: false
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :fora, Fora.Mailer, adapter: Bamboo.TestAdapter
