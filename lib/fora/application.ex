@@ -15,7 +15,9 @@ defmodule Fora.Application do
       {Phoenix.PubSub, name: Fora.PubSub},
       # Start the Endpoint (http/https)
       ForaWeb.Endpoint,
-      {Oban, Application.get_env(:fora, Oban)}
+      {Oban, Application.get_env(:fora, Oban)},
+      {Fora.Kontos.InviteAdmin,
+       admin_email_address: System.get_env("FORA_FIRST_USER_EMAIL_ADDRESS")}
       # Start a worker by calling: Fora.Worker.start_link(arg)
       # {Fora.Worker, arg}
     ]
