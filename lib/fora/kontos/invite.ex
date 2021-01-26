@@ -10,6 +10,7 @@ defmodule Fora.Kontos.Invite do
   schema "invites" do
     field :email, :string
     field :token, :binary
+    field :role, Ecto.Enum, values: [:normal, :admin]
     field :redeemed_at, :naive_datetime
     belongs_to :invited_by, Fora.Kontos.User
 
@@ -33,11 +34,11 @@ defmodule Fora.Kontos.Invite do
   The token is valid for a week as long as users don't change
   their email.
   """
-  def build_invite_token(send_to, invited_by) do
-    build_hashed_token(send_to, invited_by)
+  def build_invite_token(send_to, invited_by, role) do
+    build_hashed_token(send_to, invited_by, role)
   end
 
-  defp build_hashed_token(send_to, invited_by) do
+  defp build_hashed_token(send_to, invited_by, role) do
     token = :crypto.strong_rand_bytes(@rand_size)
     hashed_token = :crypto.hash(@hash_algorithm, token)
 
@@ -45,7 +46,16 @@ defmodule Fora.Kontos.Invite do
      %__MODULE__{
        token: hashed_token,
        email: send_to,
-       invited_by_id: invited_by.id
+       invited_by_id: invited_by.id,
+       role: role
      }}
+  end
+
+  @doc """
+  Marks the invite as redeemed
+  """
+  def redeem_changeset(invite) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    change(invite, redeemed_at: now)
   end
 end

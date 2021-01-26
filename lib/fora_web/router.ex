@@ -20,6 +20,12 @@ defmodule ForaWeb.Router do
     live "/", PageLive, :index
   end
 
+  scope "/id", ForaWeb.Id, as: :id do
+    pipe_through :browser
+
+    live "/invites/:token/edit", InviteLive.Index, :edit
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", ForaWeb do
   #   pipe_through :api

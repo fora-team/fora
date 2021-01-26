@@ -49,7 +49,9 @@ defmodule Fora.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:oban, "~> 2.3"},
       {:bamboo, "~> 1.6"},
-      {:bcrypt_elixir, "~> 2.0"}
+      {:bcrypt_elixir, "~> 2.0"},
+      {:pot, "~> 1.0"},
+      {:eqrcode, "~> 0.1.7"}
     ]
   end
 

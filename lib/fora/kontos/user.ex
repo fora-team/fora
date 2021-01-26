@@ -36,9 +36,10 @@ defmodule Fora.Kontos.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password, :first_name, :last_name])
+    |> cast(attrs, [:email, :password, :first_name, :last_name, :role])
     |> validate_email()
     |> validate_password(opts)
+    |> put_change(:confirmed_at, NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second))
   end
 
   defp validate_email(changeset) do
@@ -54,9 +55,11 @@ defmodule Fora.Kontos.User do
     changeset
     |> validate_required([:password])
     |> validate_length(:password, min: 12, max: 80)
-    # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
-    # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
-    # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
+    |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
+    |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/,
+      message: "at least one digit or punctuation character"
+    )
     |> maybe_hash_password(opts)
   end
 

@@ -91,6 +91,32 @@ defmodule Fora.Kontos do
   end
 
   @doc """
+  Registers an invitee.
+
+  ## Examples
+
+      iex> register_invitee(%{field: value}, %Invite{})
+      {:ok, %User{}}
+
+      iex> register_user(%{field: bad_value}, %Invite{})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def register_invitee(attrs, invite) do
+    user_changeset = User.registration_changeset(%User{}, attrs)
+    invite_changeset = Invite.redeem_changeset(invite)
+
+    Ecto.Multi.new()
+    |> Ecto.Multi.insert(:user, user_changeset)
+    |> Ecto.Multi.update(:invite, invite_changeset)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{user: user}} -> {:ok, user}
+      {:error, :user, changeset, _} -> {:error, changeset}
+    end
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking user changes.
 
   ## Examples
@@ -363,7 +389,7 @@ defmodule Fora.Kontos do
   """
   def deliver_invite_admin(send_to, invited_by, invite_url_fun)
       when is_function(invite_url_fun, 1) do
-    {encoded_token, invite} = Invite.build_invite_token(send_to, invited_by)
+    {encoded_token, invite} = Invite.build_invite_token(send_to, invited_by, :admin)
 
     Repo.insert!(invite)
 
@@ -372,5 +398,28 @@ defmodule Fora.Kontos do
       invited_by,
       invite_url_fun.(encoded_token)
     )
+  end
+
+  alias Fora.Kontos.Invite
+
+  @doc """
+  Gets a single invite.
+
+  Raises `Ecto.NoResultsError` if the Invite does not exist.
+
+  ## Examples
+
+      iex> get_invite_by_token!(123)
+      %Invite{}
+
+      iex> get_invite_by_token!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_invite_by_token!(token) do
+    case UserToken.verify_invite_token_query(token) do
+      {:ok, token} -> Repo.one!(token)
+      :error -> raise Ecto.NoResultsError, queryable: "invites"
+    end
   end
 end

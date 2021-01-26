@@ -26,9 +26,11 @@ defmodule Fora.Kontos.InviteAdmin do
           do: raise("Missing FORA_FIRST_USER_EMAIL_ADDRESS environment variable")
 
         {:ok, %{body: body}} =
-          Fora.Kontos.deliver_invite_admin(state[:admin_email_address], system_user, fn token ->
-            "/id/invites?token=#{token}"
-          end)
+          Fora.Kontos.deliver_invite_admin(
+            state[:admin_email_address],
+            system_user,
+            &ForaWeb.Router.Helpers.id_invite_index_url(ForaWeb.Endpoint, :edit, &1)
+          )
 
         Logger.info("the admin is invited: #{body}")
 

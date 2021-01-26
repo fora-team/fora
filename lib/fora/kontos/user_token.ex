@@ -10,6 +10,7 @@ defmodule Fora.Kontos.UserToken do
   @reset_password_validity_in_days 1
   @confirm_validity_in_days 7
   @change_email_validity_in_days 7
+  @reply_invite_in_days 7
   @session_validity_in_days 60
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -82,7 +83,7 @@ defmodule Fora.Kontos.UserToken do
     case Base.url_decode64(token, padding: false) do
       {:ok, decoded_token} ->
         hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
-        days = days_for_context(context)
+        days = @confirm_validity_in_days
 
         query =
           from token in token_and_context_query(hashed_token, context),
@@ -137,5 +138,29 @@ defmodule Fora.Kontos.UserToken do
 
   def user_and_contexts_query(user, [_ | _] = contexts) do
     from t in Fora.Kontos.UserToken, where: t.user_id == ^user.id and t.context in ^contexts
+  end
+
+  @doc """
+  Checks if the invite token is valid and returns its underlying lookup query.
+
+  The query returns the invite found by the token.
+  """
+  def verify_invite_token_query(token) do
+    case Base.url_decode64(token, padding: false) do
+      {:ok, decoded_token} ->
+        hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
+        days = @reply_invite_in_days
+
+        query =
+          from token in Fora.Kontos.Invite,
+            where: [token: ^hashed_token],
+            where: token.inserted_at > ago(^days, "day"),
+            where: is_nil(token.redeemed_at)
+
+        {:ok, query}
+
+      :error ->
+        :error
+    end
   end
 end
