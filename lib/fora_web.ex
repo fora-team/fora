@@ -31,7 +31,8 @@ defmodule ForaWeb do
     quote do
       use Phoenix.View,
         root: "lib/fora_web/templates",
-        namespace: ForaWeb
+        namespace: ForaWeb,
+        pattern: "**/*"
 
       # Import convenience functions from controllers
       import Phoenix.Controller,

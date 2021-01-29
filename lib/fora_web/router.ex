@@ -23,7 +23,7 @@ defmodule ForaWeb.Router do
   scope "/id", ForaWeb.Id, as: :id do
     pipe_through :browser
 
-    live "/invites/:token/edit", InviteLive.Index, :edit
+    live "/invites/:token/edit", InviteLive, :edit
   end
 
   # Other scopes may use custom stacks.
