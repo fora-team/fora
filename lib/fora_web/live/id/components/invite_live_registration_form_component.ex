@@ -12,7 +12,6 @@ defmodule ForaWeb.Id.InviteLiveRegistrationFormComponent do
      socket
      |> assign(:form, form)
      |> assign(:changeset, Form.changeset(form, %{}))}
-    |> IO.inspect()
 
     # |> assign(:changeset, assigns.changeset)}
   end
