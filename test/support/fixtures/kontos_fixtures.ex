@@ -3,6 +3,7 @@ defmodule Fora.KontosFixtures do
   This module defines test helpers for creating
   entities via the `Fora.Kontos` context.
   """
+  alias Fora.Kontos.Invite
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
   def valid_user_password, do: "hello world!"
@@ -34,5 +35,15 @@ defmodule Fora.KontosFixtures do
     {:ok, captured} = fun.(&"[TOKEN]#{&1}[TOKEN]")
     [_, token, _] = String.split(captured.body, "[TOKEN]")
     token
+  end
+
+  def invite_user_fixture(attrs \\ %{}) do
+    invited_by = attrs[:invited_by] || system_user_fixture()
+    send_to = attrs[:email] || unique_user_email()
+    role = attrs[:role] || :normal
+    {encoded_token, invite} = Invite.build_invite_token(send_to, invited_by, :admin)
+    Fora.Repo.insert!(invite)
+
+    encoded_token
   end
 end

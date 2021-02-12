@@ -10,6 +10,8 @@ defmodule ForaWeb.Id.InviteLive2FAFormComponent do
     secret_2fa = "T4NEVIGPGBUAVBQAK7SL2JWQPMPZBHOMOES34IKVEISDWY37"
     form = %Form{secret_2fa: secret_2fa}
 
+    IO.inspect(:pot.totp(secret_2fa))
+
     qrcode =
       "otpauth://totp/Fora:#{invite.email}?secret=#{secret_2fa}"
       |> EQRCode.encode()

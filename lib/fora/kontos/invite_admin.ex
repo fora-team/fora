@@ -29,7 +29,7 @@ defmodule Fora.Kontos.InviteAdmin do
           Fora.Kontos.deliver_invite_admin(
             state[:admin_email_address],
             system_user,
-            &ForaWeb.Router.Helpers.id_invite_url(ForaWeb.Endpoint, :edit, &1)
+            &ForaWeb.Router.Helpers.id_invite_url(ForaWeb.Endpoint, :show, &1)
           )
 
         Logger.info("the admin is invited: #{body}")

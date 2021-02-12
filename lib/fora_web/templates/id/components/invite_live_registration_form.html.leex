@@ -2,13 +2,15 @@
   <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
 
 
-<%= f = form_for @changeset, "#",
+<%= f = form_for @changeset, "/id/users",
 name: "model",
 id: "invite-form",
 phx_change: "validate",
 class: "space-y-6",
 phx_target: @myself,
-phx_submit: "save" %>
+phx_submit: "save",
+phx_trigger_action: @trigger_submit
+%>
 
 
 

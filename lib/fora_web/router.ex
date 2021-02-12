@@ -1,6 +1,8 @@
 defmodule ForaWeb.Router do
   use ForaWeb, :router
 
+  import ForaWeb.UserAuth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -8,6 +10,7 @@ defmodule ForaWeb.Router do
     plug :put_root_layout, {ForaWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_user
   end
 
   pipeline :api do
@@ -23,7 +26,7 @@ defmodule ForaWeb.Router do
   scope "/id", ForaWeb.Id, as: :id do
     pipe_through :browser
 
-    live "/invites/:token/edit", InviteLive, :edit
+    live "/invites/:token", InviteLive, :show
   end
 
   # Other scopes may use custom stacks.

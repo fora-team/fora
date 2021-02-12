@@ -11,6 +11,8 @@ defmodule ForaWeb.Id.InviteLiveRegistrationFormComponent do
     {:ok,
      socket
      |> assign(:form, form)
+     |> assign(:trigger_submit, false)
+     |> assign(:invite, invite)
      |> assign(:changeset, Form.changeset(form, %{}))}
 
     # |> assign(:changeset, assigns.changeset)}
@@ -26,17 +28,19 @@ defmodule ForaWeb.Id.InviteLiveRegistrationFormComponent do
     {:noreply,
      assign(
        socket,
-       :changeset,
-       Form.validate(socket.assigns.form, form_params)
+       changeset: Form.validate(socket.assigns.form, form_params),
+       trigger_submit: true
      )}
   end
 
   @impl
-  def handle_event("save", %{"registration_using_invite_form" => _form1_params}, socket) do
-    case Form.apply(socket.assigns.changeset) do
+  def handle_event("save", %{"registration_using_invite_form" => form_params}, socket) do
+    changeset = Form.validate(socket.assigns.form, form_params)
+
+    case Form.apply(changeset) do
       {:ok, form} ->
-        send(self(), {__MODULE__, :form_completed, form})
-        {:noreply, socket}
+        Kontos.register_invitee(Map.from_struct(form), socket.assigns.invite)
+        {:noreply, push_redirect(socket, to: "/")}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}

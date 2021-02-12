@@ -21,7 +21,7 @@ defmodule ForaWeb.Id.InviteLive do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  defp apply_action(socket, :edit, %{"token" => token}) do
+  defp apply_action(socket, :show, %{"token" => token}) do
     invite = Kontos.get_invite_by_token!(token)
 
     socket
@@ -44,12 +44,10 @@ defmodule ForaWeb.Id.InviteLive do
 
   @impl
   def handle_info({ForaWeb.Id.InviteLive2FAFormComponent, :form_completed, form}, socket) do
-    # attrs = Map.merge(Map.from_struct(form1), Map.from_struct(form2))
-    # Kontos.register_invitee(attrs, socket.assigns.invite)
+    attrs = Map.merge(Map.from_struct(socket.assigns.form1), Map.from_struct(form))
 
-    {:noreply,
-     socket
-     |> assign(:form_step, :finished)
-     |> assign(:form2, form)}
+    Kontos.register_invitee(attrs, socket.assigns.invite)
+
+    {:noreply, assign(socket, form_step: :finished, form2: form)}
   end
 end
