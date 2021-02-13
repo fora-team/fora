@@ -27,6 +27,7 @@ defmodule ForaWeb.Router do
     pipe_through :browser
 
     live "/invites/:token", InviteLive, :show
+    post "/users/register", UserController, :create
   end
 
   # Other scopes may use custom stacks.

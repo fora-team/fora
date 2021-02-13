@@ -94,7 +94,7 @@ defmodule Fora.Kontos do
   @type registration_attr :: %{password: String.t(), first_name: String.t()}
   @spec register_user_with_invitation(%Invite{}, registration_attr) ::
           {:ok, %User{}} | {:error, %Ecto.Changeset{}}
-  def register_user_with_invitation(%Invite{} = invite, attrs) do
+  def register_user_with_invitation(%Invite{redeemed_at: nil} = invite, attrs) do
     params = %{
       email: invite.email,
       role: invite.role,
@@ -110,32 +110,6 @@ defmodule Fora.Kontos do
       |> Invite.redeem_changeset(by: user)
       |> repo.update
     end)
-    |> Repo.transaction()
-    |> case do
-      {:ok, %{user: user}} -> {:ok, user}
-      {:error, :user, changeset, _} -> {:error, changeset}
-    end
-  end
-
-  @doc """
-  Registers an invitee.
-
-  ## Examples
-
-      iex> register_invitee(%{field: value}, %Invite{})
-      {:ok, %User{}}
-
-      iex> register_user(%{field: bad_value}, %Invite{})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def register_invitee(attrs, invite) do
-    user_changeset = User.registration_changeset(%User{}, attrs)
-    invite_changeset = Invite.redeem_changeset(invite)
-
-    Ecto.Multi.new()
-    |> Ecto.Multi.insert(:user, user_changeset)
-    |> Ecto.Multi.update(:invite, invite_changeset)
     |> Repo.transaction()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}

@@ -2,7 +2,7 @@
   <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
 
 
-<%= f = form_for @changeset, "/id/users",
+<%= f = form_for @changeset, Routes.id_user_path(@socket, :create),
 name: "model",
 id: "invite-form",
 phx_change: "validate",
@@ -13,6 +13,7 @@ phx_trigger_action: @trigger_submit
 %>
 
 
+        <%= hidden_input f, :invitation_token  %>
 
     <div>
       <%= label f, :email, class: "block text-sm font-medium text-gray-700 select-none" %>

@@ -1,12 +1,11 @@
 defmodule ForaWeb.Id.InviteLiveRegistrationFormComponent do
   use ForaWeb, :live_component
 
-  alias Fora.Kontos
   alias ForaWeb.Id.RegistrationUsingInviteForm, as: Form
 
   @impl true
-  def update(assigns = %{invite: invite}, socket) do
-    form = %Form{email: invite.email, role: invite.role}
+  def update(%{invite: invite, invitation_token: invitation_token}, socket) do
+    form = %Form{email: invite.email, invitation_token: invitation_token}
 
     {:ok,
      socket
@@ -28,19 +27,17 @@ defmodule ForaWeb.Id.InviteLiveRegistrationFormComponent do
     {:noreply,
      assign(
        socket,
-       changeset: Form.validate(socket.assigns.form, form_params),
-       trigger_submit: true
+       changeset: Form.validate(socket.assigns.form, form_params)
      )}
   end
 
-  @impl
+  @impl true
   def handle_event("save", %{"registration_using_invite_form" => form_params}, socket) do
     changeset = Form.validate(socket.assigns.form, form_params)
 
     case Form.apply(changeset) do
-      {:ok, form} ->
-        Kontos.register_invitee(Map.from_struct(form), socket.assigns.invite)
-        {:noreply, push_redirect(socket, to: "/")}
+      {:ok, _form} ->
+        {:noreply, assign(socket, trigger_submit: true)}
 
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}

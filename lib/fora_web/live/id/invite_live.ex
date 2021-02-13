@@ -26,28 +26,10 @@ defmodule ForaWeb.Id.InviteLive do
 
     socket
     |> assign(:token, token)
+    |> assign(:invitation_token, token)
     |> assign(:invite, invite)
     |> assign(:form1, nil)
     |> assign(:form2, nil)
     |> assign(:form_step, :form1)
-  end
-
-  @impl
-  def handle_info({ForaWeb.Id.InviteLiveRegistrationFormComponent, :form_completed, form}, socket) do
-    IO.inspect(socket.assigns)
-
-    {:noreply,
-     socket
-     |> assign(:form_step, :form2)
-     |> assign(:form1, form)}
-  end
-
-  @impl
-  def handle_info({ForaWeb.Id.InviteLive2FAFormComponent, :form_completed, form}, socket) do
-    attrs = Map.merge(Map.from_struct(socket.assigns.form1), Map.from_struct(form))
-
-    Kontos.register_invitee(attrs, socket.assigns.invite)
-
-    {:noreply, assign(socket, form_step: :finished, form2: form)}
   end
 end

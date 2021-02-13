@@ -10,7 +10,7 @@ defmodule ForaWeb.Id.RegistrationUsingInviteForm do
     field :password
     field :first_name
     field :last_name
-    field :role
+    field :invitation_token
   end
 
   def changeset(struct, params) do
