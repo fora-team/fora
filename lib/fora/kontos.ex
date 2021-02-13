@@ -6,6 +6,7 @@ defmodule Fora.Kontos do
   import Ecto.Query, warn: false
   alias Fora.Repo
   alias Fora.Kontos.{User, UserToken, UserNotifier, Invite}
+  alias Ecto.Multi
 
   @doc """
   Returns the list of users.
@@ -88,6 +89,32 @@ defmodule Fora.Kontos do
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()
+  end
+
+  @type registration_attr :: %{password: String.t(), first_name: String.t()}
+  @spec register_user_with_invitation(%Invite{}, registration_attr) ::
+          {:ok, %User{}} | {:error, %Ecto.Changeset{}}
+  def register_user_with_invitation(%Invite{} = invite, attrs) do
+    params = %{
+      email: invite.email,
+      role: invite.role,
+      first_name: attrs[:first_name],
+      last_name: nil,
+      password: attrs[:password]
+    }
+
+    Multi.new()
+    |> Multi.run(:user, fn _, _ -> register_user(params) end)
+    |> Multi.run(:invite, fn repo, %{user: user} ->
+      invite
+      |> Invite.redeem_changeset(by: user)
+      |> repo.update
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{user: user}} -> {:ok, user}
+      {:error, :user, changeset, _} -> {:error, changeset}
+    end
   end
 
   @doc """

@@ -12,6 +12,7 @@ defmodule Fora.Kontos.Invite do
     field :token, :binary
     field :role, Ecto.Enum, values: [:normal, :admin]
     field :redeemed_at, :naive_datetime
+    belongs_to :redeemed_by, Fora.Kontos.User
     belongs_to :invited_by, Fora.Kontos.User
 
     timestamps()
@@ -54,8 +55,11 @@ defmodule Fora.Kontos.Invite do
   @doc """
   Marks the invite as redeemed
   """
-  def redeem_changeset(invite) do
+  def redeem_changeset(invite, by: user) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-    change(invite, redeemed_at: now)
+
+    invite
+    |> change(redeemed_at: now)
+    |> change(redeemed_by_id: user.id)
   end
 end

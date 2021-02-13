@@ -8,8 +8,8 @@ defmodule Fora.Repo.Migrations.CreateInvites do
       add :email, :string, null: false
       add :role, :string, null: false
       add :redeemed_at, :naive_datetime
+      add :redeemed_by_id, references(:users, on_delete: :nothing, type: :binary_id), null: true
       add :invited_by_id, references(:users, on_delete: :nothing, type: :binary_id), null: false
-      add :user_final_id, references(:users, on_delete: :nothing, type: :binary_id), null: true
 
       timestamps()
     end

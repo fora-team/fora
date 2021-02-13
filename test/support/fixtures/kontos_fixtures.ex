@@ -6,7 +6,7 @@ defmodule Fora.KontosFixtures do
   alias Fora.Kontos.Invite
 
   def unique_user_email, do: "user#{System.unique_integer()}@example.com"
-  def valid_user_password, do: "hello world!"
+  def valid_user_password, do: "8iI0191kKplsk1-10"
 
   def system_user_fixture() do
     Fora.Repo.insert!(
@@ -38,8 +38,8 @@ defmodule Fora.KontosFixtures do
   end
 
   def invite_user_fixture(attrs \\ %{}) do
-    invited_by = attrs[:invited_by] || system_user_fixture()
-    send_to = attrs[:email] || unique_user_email()
+    invited_by = Map.get_lazy(attrs, :invited_by, &system_user_fixture/0)
+    send_to = Map.get_lazy(attrs, :email, &unique_user_email/0)
     role = attrs[:role] || :normal
     {encoded_token, invite} = Invite.build_invite_token(send_to, invited_by, :admin)
     Fora.Repo.insert!(invite)
