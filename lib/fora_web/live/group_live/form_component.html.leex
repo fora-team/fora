@@ -1,0 +1,134 @@
+<div id="<%= @id %>" class="phx-modal"
+    phx-capture-click="close"
+    phx-window-keydown="close"
+    phx-key="escape"
+    phx-target="#<%= @id %>"
+    phx-page-loading>
+
+
+    <div class="fixed z-10 inset-0 overflow-y-auto">
+      <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!--
+          Background overlay, show/hide based on modal state.
+
+          Entering: "ease-out duration-300"
+            From: "opacity-0"
+            To: "opacity-100"
+          Leaving: "ease-in duration-200"
+            From: "opacity-100"
+            To: "opacity-0"
+        -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true"><div class="absolute inset-0 bg-gray-500 opacity-75"></div></div>
+
+        <!-- This element is to trick the browser into centering the modal contents. -->
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        start
+        <!--
+          Modal panel, show/hide based on modal state.
+
+          Entering: "ease-out duration-300"
+            From: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            To: "opacity-100 translate-y-0 sm:scale-100"
+          Leaving: "ease-in duration-200"
+            From: "opacity-100 translate-y-0 sm:scale-100"
+            To: "opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+        -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full dark:bg-gray-700" role="dialog" aria-modal="true" aria-labelledby="modal-headline" phx-capture-click="close">
+
+        <%= f = form_for @changeset, "#",
+                     id: "group-form",
+                     phx_target: @myself,
+                     phx_change: "validate",
+                     class: "pace-y-8",
+                     phx_submit: "save" %>
+                     
+                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 dark:bg-gray-700">
+                       <div class="sm:flex sm:items-start">
+                         <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100 dark:bg-indigo-600 sm:mx-0 sm:h-10 sm:w-10">
+                           <svg class="h-6 w-6 text-indigo-600 dark:text-indigo-100" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                           </svg>
+                         </div>
+                     
+                         <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                           <div class="mt-2">
+                             <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+                               <div>
+                                 <div id="new-group-title">
+                                   <h3 class="text-lg leading-6 font-medium text-gray-900"><%= @title %></h3>
+                                   <p class="mt-1 max-w-2xl text-sm text-gray-500">Create a new Team/Project</p>
+                                 </div> 
+                                 <div class="new-group-body mt-6 sm:mt-5 space-y-6 sm:space-y-5">
+                                   <div class="new-group-input sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                                     <%= label f, :icon, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2" do %>
+                                       <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                     <% end %>
+                     
+                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                       <%= text_input f, :icon, class: "max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md", autocomplete: :off %>
+                                       <%= error_tag f, :icon, class: "mt-2 text-sm text-red-600" %>
+                                     </div>
+                                   </div>
+                     
+                                   <div class="new-group-input sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                                     <%= label f, :name, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"  %>
+                     
+                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                       <%= text_input f, :name, class: "max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md", autocomplete: :off %>
+                                       <%= error_tag f, :name, class: "mt-2 text-sm text-red-600" %>
+                                     </div>
+                                   </div>
+                     
+                     
+                                   <div class="new-group-input sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                                     <%= label f, :slug, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"  %>
+                     
+                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                       <%= text_input f, :slug, class: "max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md", autocomplete: :off %>
+                                       <%= error_tag f, :slug, class: "mt-2 text-sm text-red-600" %>
+                                     </div>
+                                   </div>
+                     
+                                   <div class="new-group-input sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:pt-5">
+                                     <%= label f, :description, class: "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"  %>
+                     
+                                     <div class="mt-1 sm:mt-0 sm:col-span-2">
+                                       <%= textarea f, :description, class: "max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md", phx_hook: "MaintainAttrs", data_attrs: "style" %>
+                                       <%= error_tag f, :description, class: "mt-2 text-sm text-red-600" %>
+                                     </div>
+                                   </div>
+                     
+                                   <!-- end of new-group-body -->
+                                 </div>
+                                 <div>
+                                   <!-- enf of space-y-8 divide-y divide-gray-200 sm:space-y-5 -->
+                                 </div>
+                     
+                                 <br />
+                                 <!-- end of mt-2 -->
+                               </div>
+                               <!-- end of the whole aread? -->
+                             </div>
+                     
+                     
+                     
+                     
+                     
+                             <!-- end of sm:flex sm:items-start -->
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                     <div class="bg-gray-50 dark:bg-gray-500 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+
+                       <%= submit "CREATE", class: "primary-button", phx_disable_with: "Saving..." %>
+                       <button type="button" class="secondary-button" phx-click="close" phx-target="#<%= @id %>">
+                         Cancel
+                       </button>
+                     </div>
+                </form>
+        <!-- end of modal-headline -->
+        </div>
+    </div>
+  </div>
+</div>

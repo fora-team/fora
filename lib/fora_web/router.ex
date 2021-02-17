@@ -21,6 +21,7 @@ defmodule ForaWeb.Router do
     pipe_through :browser
 
     live "/", PageLive, :index
+    live "/group/new", PageLive, :new
   end
 
   scope "/id", ForaWeb.Id, as: :id do
