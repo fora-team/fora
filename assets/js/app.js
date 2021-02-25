@@ -21,6 +21,14 @@ import {LiveSocket} from "phoenix_live_view"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
+let Hooks = {}
+
+Hooks.MaintainAttrs = {
+  attrs(){ return this.el.getAttribute("data-attrs").split(", ") },
+  beforeUpdate(){ this.prevAttrs = this.attrs().map(name => [name, this.el.getAttribute(name)]) },
+  updated(){ this.prevAttrs.forEach(([name, val]) => this.el.setAttribute(name, val)) }
+}
+
 let liveSocket = new LiveSocket('/live', Socket, {
   dom: {
     onBeforeElUpdated(from, to) {
@@ -31,7 +39,8 @@ let liveSocket = new LiveSocket('/live', Socket, {
   },
   params: {
     _csrf_token: csrfToken
-  }
+  },
+  hooks: Hooks
 })
 
 // Show progress bar on live navigation and form submits
