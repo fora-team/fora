@@ -13,9 +13,13 @@ defmodule Fora.Kontos.InviteAdmin do
   end
 
   @impl true
-  def init(params) do
-    Process.send_after(self(), :invite_admin_if_needed, 5000)
-    {:ok, params}
+  def init(args) do
+    if args[:send_invite_admin] do
+      Process.send_after(self(), :invite_admin_if_needed, 5000)
+      {:ok, args}
+    else
+      :ignore
+    end
   end
 
   @impl true

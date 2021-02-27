@@ -26,3 +26,5 @@ config :fora, Oban, crontab: false, queues: false, plugins: false
 config :logger, level: :warn
 
 config :fora, Fora.Mailer, adapter: Bamboo.TestAdapter
+
+config :fora, Fora.Kontos, send_invite_admin: false

@@ -17,7 +17,10 @@ defmodule Fora.Application do
       ForaWeb.Endpoint,
       {Oban, Application.get_env(:fora, Oban)},
       {Fora.Kontos.InviteAdmin,
-       admin_email_address: System.get_env("FORA_FIRST_USER_EMAIL_ADDRESS")}
+       [
+         admin_email_address: System.get_env("FORA_FIRST_USER_EMAIL_ADDRESS"),
+         send_invite_admin: Application.get_env(:fora, Fora.Kontos)[:send_invite_admin]
+       ]}
       # Start a worker by calling: Fora.Worker.start_link(arg)
       # {Fora.Worker, arg}
     ]
