@@ -17,6 +17,10 @@ defmodule Fora.Groups.Group do
   def changeset(group, attrs) do
     group
     |> cast(attrs, [:icon, :name, :slug, :description])
-    |> validate_required([:icon, :name, :slug, :description])
+    |> validate_required([:icon, :name, :slug])
+    |> validate_length(:icon, is: 1)
+    |> update_change(:name, &String.trim/1)
+    |> unsafe_validate_unique(:slug, Fora.Repo)
+    |> unique_constraint(:slug)
   end
 end

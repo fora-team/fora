@@ -27,19 +27,6 @@ defmodule ForaWeb.GroupLive.FormComponent do
     save_group(socket, socket.assigns.action, group_params)
   end
 
-  defp save_group(socket, :edit, group_params) do
-    case Groups.update_group(socket.assigns.group, group_params) do
-      {:ok, _group} ->
-        {:noreply,
-         socket
-         |> put_flash(:info, "Group updated successfully")
-         |> push_redirect(to: socket.assigns.return_to)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
-    end
-  end
-
   defp save_group(socket, :new, group_params) do
     case Groups.create_group(group_params) do
       {:ok, _group} ->
