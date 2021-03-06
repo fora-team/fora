@@ -15,4 +15,8 @@ defmodule Fora.Groups do
   def list_groups() do
     Repo.all(Group)
   end
+
+  def get_group_by_slug!(slug) do
+    Repo.get_by!(Group, slug: slug)
+  end
 end

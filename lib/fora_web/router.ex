@@ -22,6 +22,7 @@ defmodule ForaWeb.Router do
 
     live "/", PageLive, :index
     live "/group/new", PageLive, :new
+    live "/g/:slug", GroupLive.Show, :show
   end
 
   scope "/id", ForaWeb.Id, as: :id do
@@ -29,6 +30,10 @@ defmodule ForaWeb.Router do
 
     live "/invites/:token", InviteLive, :show
     post "/users/register", UserController, :create
+  end
+
+  scope "/g/:slug", ForaWeb do
+    live "/boards", BoardLive.Index, :index
   end
 
   # Other scopes may use custom stacks.

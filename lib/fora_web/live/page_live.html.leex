@@ -26,7 +26,7 @@
       </div>
       <%= for group <- @groups do %>
         <div class="hover:bg-gray-100 w-64 h-32 shadow-lg rounded-lg overflow-hidden">
-          <a href="/<%= group.slug %>">
+          <a href="/g/<%= group.slug %>">
             <div class="pt-4 pl-4 text-4xl"><%= group.icon %></div>
             <div class="text-lg text-gray-900 font-bold pl-4 pt-4"><%= group.name %></div>
             <div class="text-xs text-gray-900 pl-4 truncate pr-4"><%= group.description %></div>
