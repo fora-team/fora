@@ -23,7 +23,12 @@ defmodule ForaWeb.GroupLive.FormComponent do
     {:noreply, assign(socket, :changeset, changeset)}
   end
 
+  def handle_event("close", _, socket) do
+    {:noreply, push_redirect(socket, to: socket.assigns.return_to)}
+  end
+
   def handle_event("save", %{"group" => group_params}, socket) do
+    {:noreply, push_redirect(socket, to: socket.assigns.return_to)}
     save_group(socket, socket.assigns.action, group_params)
   end
 
