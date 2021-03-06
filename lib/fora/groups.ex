@@ -11,4 +11,8 @@ defmodule Fora.Groups do
     |> change_group(attrs)
     |> Repo.insert()
   end
+
+  def list_groups() do
+    Repo.all(Group)
+  end
 end

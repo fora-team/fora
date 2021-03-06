@@ -24,12 +24,12 @@
           <%= live_patch "+", to: Routes.page_path(@socket, :new) %>
         </div>
       </div>
-      <%= for {icon, catg} <- [{"🏢", "General"}, {"🧑‍💻", "Engineering"}, {"🧑‍🎨", "Design"}] do %>
+      <%= for group <- @groups do %>
         <div class="hover:bg-gray-100 w-64 h-32 shadow-lg rounded-lg overflow-hidden">
-          <a href="/general">
-          <div class="pt-4 pl-4 text-4xl"><%= icon %></div>
-          <div class="text-lg text-gray-900 font-bold pl-4 pt-4"><%= catg %></div>
-          <div class="text-xs text-gray-900 pl-4 truncate pr-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</div>
+          <a href="/<%= group.slug %>">
+            <div class="pt-4 pl-4 text-4xl"><%= group.icon %></div>
+            <div class="text-lg text-gray-900 font-bold pl-4 pt-4"><%= group.name %></div>
+            <div class="text-xs text-gray-900 pl-4 truncate pr-4"><%= group.description %></div>
           </a>
         </div>
       <% end %>

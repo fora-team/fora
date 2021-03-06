@@ -1,11 +1,12 @@
 defmodule ForaWeb.PageLive do
   use ForaWeb, :live_view
 
-  alias Fora.Groups.Group
+  alias Fora.Groups
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, query: "", results: %{})}
+    groups = Groups.list_groups()
+    {:ok, assign(socket, groups: groups)}
   end
 
   @impl true
@@ -16,7 +17,7 @@ defmodule ForaWeb.PageLive do
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New Group")
-    |> assign(:group, %Group{})
+    |> assign(:group, %Groups.Group{})
   end
 
   defp apply_action(socket, :index, _params) do
