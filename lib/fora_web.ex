@@ -31,7 +31,8 @@ defmodule ForaWeb do
     quote do
       use Phoenix.View,
         root: "lib/fora_web/templates",
-        namespace: ForaWeb
+        namespace: ForaWeb,
+        pattern: "**/*"
 
       # Import convenience functions from controllers
       import Phoenix.Controller,
@@ -83,6 +84,7 @@ defmodule ForaWeb do
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers
+      import ForaWeb.LiveHelpers
 
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View

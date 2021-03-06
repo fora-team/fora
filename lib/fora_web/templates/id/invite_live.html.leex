@@ -1,0 +1,18 @@
+<div class="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 dark:bg-gray-800">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+      Compelete the invitation
+    </h2>
+  </div>
+
+  <%= live_component @socket, ForaWeb.Id.InviteLiveProgressBarComponent, form_step: @form_step %>
+
+  <%= if @form_step == :form1 do %>
+    <%= live_component @socket, ForaWeb.Id.InviteLiveRegistrationFormComponent, id: :form1, invite: @invite, invitation_token: @invitation_token %>
+  <% end %>
+
+  <%= if @form_step == :form2 do %>
+    <%= live_component @socket, ForaWeb.Id.InviteLive2FAFormComponent, id: :form2, invite: @invite %>
+  <% end %>
+
+</div>

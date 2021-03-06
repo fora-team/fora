@@ -48,7 +48,10 @@ defmodule Fora.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:oban, "~> 2.3"},
-      {:bamboo, "~> 1.6"}
+      {:bamboo, "~> 1.6"},
+      {:bcrypt_elixir, "~> 2.0"},
+      {:pot, "~> 1.0"},
+      {:eqrcode, "~> 0.1.7"}
     ]
   end
 
@@ -63,7 +66,8 @@ defmodule Fora.MixProject do
       setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      "test.watch": ["cmd 'fswatch lib test | mix test --color --stale --listen-on-stdin'"]
     ]
   end
 end

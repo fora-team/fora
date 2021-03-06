@@ -1,5 +1,7 @@
 use Mix.Config
 
+# Only in tests, remove the complexity from the password hashing algorithm
+config :bcrypt_elixir, :log_rounds, 1
 # Configure your database
 #
 # The MIX_TEST_PARTITION environment variable can be used
@@ -24,3 +26,5 @@ config :fora, Oban, crontab: false, queues: false, plugins: false
 config :logger, level: :warn
 
 config :fora, Fora.Mailer, adapter: Bamboo.TestAdapter
+
+config :fora, Fora.Kontos, send_invite_admin: false

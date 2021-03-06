@@ -1,48 +1,42 @@
-<section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
-  <p>Peace of mind from prototype to production</p>
 
-  <form phx-change="suggest" phx-submit="search">
-    <input type="text" name="q" value="<%= @query %>" placeholder="Live dependency search" list="results" autocomplete="off"/>
-    <datalist id="results">
-      <%= for {app, _vsn} <- @results do %>
-        <option value="<%= app %>"><%= app %></option>
+<%= if @live_action in [:new] do %>
+    <%= live_component @socket, ForaWeb.GroupLive.FormComponent,
+    id:  :new,
+    title: @page_title,
+    action: @live_action,
+    group: @group,
+    return_to: Routes.page_path(@socket, :index) %>
+<% end %>
+
+
+<div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
+  <div class="px-4 py-5 sm:px-6">
+
+    <h1><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h1>
+    <!-- Content goes here -->
+    <!-- We use less vertical padding on card headers on desktop than on body sections -->
+  </div>
+  <div class="px-4 py-5 sm:p-6">
+    <!-- Content goes here -->
+    <div class="flex flex-wrap justify-around items-center">
+      <div class="w-64 h-32 shadow-lg rounded-lg overflow-hidden flex justify-around items-center">
+        <div class="text-4xl text-gray-900">
+          <%= live_patch "+", to: Routes.page_path(@socket, :new) %>
+        </div>
+      </div>
+      <%= for {icon, catg} <- [{"🏢", "General"}, {"🧑‍💻", "Engineering"}, {"🧑‍🎨", "Design"}] do %>
+        <div class="hover:bg-gray-100 w-64 h-32 shadow-lg rounded-lg overflow-hidden">
+          <a href="/general">
+          <div class="pt-4 pl-4 text-4xl"><%= icon %></div>
+          <div class="text-lg text-gray-900 font-bold pl-4 pt-4"><%= catg %></div>
+          <div class="text-xs text-gray-900 pl-4 truncate pr-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</div>
+          </a>
+        </div>
       <% end %>
-    </datalist>
-    <button type="submit" phx-disable-with="Searching...">Go to Hexdocs</button>
-  </form>
-</section>
-
-<section class="row">
-  <article class="column">
-    <h2>Resources</h2>
-    <ul>
-      <li>
-        <a href="https://hexdocs.pm/phoenix/overview.html">Guides &amp; Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix/blob/v1.5/CHANGELOG.md">v1.5 Changelog</a>
-      </li>
-    </ul>
-  </article>
-  <article class="column">
-    <h2>Help</h2>
-    <ul>
-      <li>
-        <a href="https://elixirforum.com/c/phoenix-forum">Forum</a>
-      </li>
-      <li>
-        <a href="https://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on Freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">Twitter @elixirphoenix</a>
-      </li>
-      <li>
-        <a href="https://elixir-slackin.herokuapp.com/">Elixir on Slack</a>
-      </li>
-    </ul>
-  </article>
-</section>
+    </div>
+  </div>
+  <div class="px-4 py-4 sm:px-6">
+    <!-- Content goes here -->
+    <!-- We use less vertical padding on card footers at all sizes than on headers or body sections -->
+  </div>
+</div>
